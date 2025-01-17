@@ -15,7 +15,7 @@ classdef gui < matlab.mixin.SetGet
 
     end
 
-    properties %(SetAccess = private)
+    properties (SetAccess = private)
         uifig matlab.ui.Figure = matlab.ui.Figure.empty
         components struct = struct() % struct to hold the various gui components
 
