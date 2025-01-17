@@ -4,8 +4,8 @@ classdef gui < matlab.mixin.SetGet
     
     %% --- PROPERTIES ------------------------------------------------------------------------------
     properties %(SetAccess = immutable)
-        appName     string  = "All The Bits"
-        appVersion  string  = "1.0"
+        appName     string  = "MyApp"
+        appVersion  string  = "0.0"
         verbose     logical = true  % if TRUE then interactions are announced to stdout     
 
     end
