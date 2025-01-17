@@ -1,4 +1,4 @@
-classdef allthebits < matlab.mixin.SetGet
+classdef kitchensink < matlab.mixin.SetGet
     %GUI Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -29,7 +29,7 @@ classdef allthebits < matlab.mixin.SetGet
     
     %% --- METHODS ---------------------------------------------------------------------------------
     methods % constructor/destructor
-        function obj = allthebits
+        function obj = kitchensink
             % build the gui
             obj.makefigure
             obj.addcomponents
@@ -137,6 +137,12 @@ classdef allthebits < matlab.mixin.SetGet
         end % makefigure
 
         function addcomponents(obj)
+            % ADDCOMPONENTS add UI components to the main figure
+            %   For this project we aim to add examples for all available UI components in current MATLAB
+            %
+            %   List of components can be found at:
+            %   https://www.mathworks.com/help/matlab/creating_guis/choose-components-for-your-app-designer-app.html
+
 
         end % addcomponents
 
