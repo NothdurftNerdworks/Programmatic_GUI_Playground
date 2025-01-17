@@ -1,4 +1,4 @@
-classdef gui < matlab.mixin.SetGet
+classdef allthebits < matlab.mixin.SetGet
     %GUI Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -29,7 +29,7 @@ classdef gui < matlab.mixin.SetGet
     
     %% --- METHODS ---------------------------------------------------------------------------------
     methods % constructor/destructor
-        function obj = gui
+        function obj = allthebits
             % build the gui
             obj.makefigure
             obj.addcomponents
