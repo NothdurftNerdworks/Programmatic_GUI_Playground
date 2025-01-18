@@ -144,25 +144,13 @@ classdef kitchensink < matlab.mixin.SetGet
             %   https://www.mathworks.com/help/matlab/creating_guis/choose-components-for-your-app-designer-app.html
 
             % common components
-            commonComponents = ["uibutton", "uicheckbox", "uicolorpicker", "uisetcolor"]
 
             % List of common UI components in MATLAB as a string array
             uiComponents = [
                 "uicontrol", ...
                 "uifigure", ...
 
-                "uiknob", ...
-                "uidropdown", ...
-                "uipanel", ...
-                "uitab", ...
-                "uitabgroup", ...
 
-                "uiflowcontainer", ...
-                "uigridlayout", ...
-
-                "uimenu", ...
-                "uitoolbar", ...
-                "uicontextmenu"
                 ];
 
             %% common components
@@ -292,11 +280,27 @@ classdef kitchensink < matlab.mixin.SetGet
             %   https://www.mathworks.com/help/matlab/ref/uiopen.html
             %   https://www.mathworks.com/help/matlab/ref/uisave.html
 
-            %
+            %% instrumentation
+            % "uigauge" style can be "circular", "linear", "ninetydegree", or "semicircular".
+            %   https://www.mathworks.com/help/matlab/ref/uigauge.html
+            g = uigauge;
 
+            % "uiknob" style can be 'continuous' or 'discrete'
+            %   https://www.mathworks.com/help/matlab/ref/uiknob.html
+            kb = uiknob;
 
-            
+            % "uilamp"
+            %   https://www.mathworks.com/help/matlab/ref/uilamp.html
+            lmp = uilamp;
 
+            % "uiswitch" style can be "slider", "rocker", or "toggle"
+            %   https://www.mathworks.com/help/matlab/ref/uiswitch.html
+            s = uiswitch;
+
+            %% html
+            % "uihtml"
+            %   https://www.mathworks.com/help/matlab/ref/uihtml.html
+            h = uihtml;
 
         end % addcomponents
 
