@@ -150,26 +150,22 @@ classdef kitchensink < matlab.mixin.SetGet
             uiComponents = [
                 "uicontrol", ...
                 "uifigure", ...
-                "uitextarea", ...
-                , ...
-                "uiradiobutton", ...
-                "uislider", ...
-                "uispinner", ...
+
                 "uiknob", ...
                 "uidropdown", ...
                 "uipanel", ...
                 "uitab", ...
                 "uitabgroup", ...
-                "uitree", ...
-                "uitreenode", ...
+
                 "uiflowcontainer", ...
                 "uigridlayout", ...
-                "uilabel", ...
+
                 "uimenu", ...
                 "uitoolbar", ...
                 "uicontextmenu"
                 ];
 
+            %% common components
             % "uibutton" style can be "push" or "state".
             btn = uibutton;
 
@@ -207,9 +203,59 @@ classdef kitchensink < matlab.mixin.SetGet
             bg = uibuttongroup;
             rb = uiradiobutton;
 
-            % "uislider"
+            % "uislider" style can be "slider" or "range"
             %   https://www.mathworks.com/help/matlab/ref/uislider.html
             sld = uislider;
+
+            % "uispinner"
+            %   https://www.mathworks.com/help/matlab/ref/uispinner.html
+            spn = uispinner;
+
+            % "uitable"
+            %   https://www.mathworks.com/help/matlab/ref/uitable.html
+            uit = uitable;
+
+            % "uitextarea"
+            %   https://www.mathworks.com/help/matlab/ref/uitextarea.html
+            txa = uitextarea;
+
+            % "uitogglebutton"
+            %   https://www.mathworks.com/help/matlab/ref/uibuttongroup.html
+            %   https://www.mathworks.com/help/matlab/ref/uitogglebutton.html
+            bg = uibuttongroup;
+            tb = uitogglebutton;
+
+            % "uitree" style can be 'tree' or 'checkbox'
+            %   https://www.mathworks.com/help/matlab/ref/uitree.html
+            %   https://www.mathworks.com/help/matlab/ref/uitreenode.html
+            t = uitree;
+            node = uitreenode;
+
+            %% axes
+            % "uiaxes"
+            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.uiaxes-properties.html
+            ax = uiaxes;
+
+            % "axes"
+            %   https://www.mathworks.com/help/matlab/ref/matlab.graphics.axis.axes-properties.html
+            ax = axes;
+
+            % "geoaxes"
+            %   https://www.mathworks.com/help/matlab/ref/matlab.graphics.axis.geographicaxes-properties.html
+            gx = geoaxes;
+
+            % "polaraxes"
+            %   https://www.mathworks.com/help/matlab/ref/matlab.graphics.axis.polaraxes-properties.html
+            px = polaraxes;
+
+            %% containers and figure tools
+            % "uigridlayout"
+            %   https://www.mathworks.com/help/matlab/ref/uigridlayout.html
+            g = uigridlayout;
+
+            % "uipanel"
+            %   https://www.mathworks.com/help/matlab/ref/uipanel.html
+            p = uipanel;
 
 
         end % addcomponents
