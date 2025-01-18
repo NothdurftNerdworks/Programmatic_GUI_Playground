@@ -143,6 +143,74 @@ classdef kitchensink < matlab.mixin.SetGet
             %   List of components can be found at:
             %   https://www.mathworks.com/help/matlab/creating_guis/choose-components-for-your-app-designer-app.html
 
+            % common components
+            commonComponents = ["uibutton", "uicheckbox", "uicolorpicker", "uisetcolor"]
+
+            % List of common UI components in MATLAB as a string array
+            uiComponents = [
+                "uicontrol", ...
+                "uifigure", ...
+                "uitextarea", ...
+                , ...
+                "uiradiobutton", ...
+                "uislider", ...
+                "uispinner", ...
+                "uiknob", ...
+                "uidropdown", ...
+                "uipanel", ...
+                "uitab", ...
+                "uitabgroup", ...
+                "uitree", ...
+                "uitreenode", ...
+                "uiflowcontainer", ...
+                "uigridlayout", ...
+                "uilabel", ...
+                "uimenu", ...
+                "uitoolbar", ...
+                "uicontextmenu"
+                ];
+
+            % "uibutton" style can be "push" or "state".
+            btn = uibutton;
+
+            % "uicheckbox"
+            cbx = uicheckbox;
+
+            % "uicolorpicker"
+            c = uicolorpicker; % 2024A
+            c = uisetcolor;
+
+            % "uidatepicker"
+            d = uidatepicker;
+
+            % "uidropdown"
+            dd = uidropdown;
+
+            % "uieditfield" style can be "text" or "numeric"
+            ef = uieditfield;
+
+            % "hlink"
+            hlink = uihyperlink;
+
+            % "uiimage"
+            im = uiimage;
+
+            % "uilabel"
+            lbl = uilabel;
+
+            % "uilistbox"
+            lb = uilistbox;
+
+            % "uibuttongroup"
+            %   https://www.mathworks.com/help/matlab/ref/uibuttongroup.html
+            %   https://www.mathworks.com/help/matlab/ref/uiradiobutton.html
+            bg = uibuttongroup;
+            rb = uiradiobutton;
+
+            % "uislider"
+            %   https://www.mathworks.com/help/matlab/ref/uislider.html
+            sld = uislider;
+
 
         end % addcomponents
 
