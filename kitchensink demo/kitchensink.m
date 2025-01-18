@@ -256,6 +256,46 @@ classdef kitchensink < matlab.mixin.SetGet
             % "uipanel"
             %   https://www.mathworks.com/help/matlab/ref/uipanel.html
             p = uipanel;
+            
+            % "tabgroup" & "tab"
+            %   https://www.mathworks.com/help/matlab/ref/uitabgroup.html
+            %   https://www.mathworks.com/help/matlab/ref/uitab.html
+            tg = uitabgroup;
+            t = uitab;
+
+            % "uimenu"
+            %   https://www.mathworks.com/help/matlab/ref/uimenu.html
+            m = uimenu;
+            
+            % "uicontextmenu"
+            %   https://www.mathworks.com/help/matlab/ref/uicontextmenu.html
+            cm = uicontextmenu;
+
+            % "toolbar" & "pushtool" & "toggletool"
+            %   https://www.mathworks.com/help/matlab/ref/uitoolbar.html
+            %   https://www.mathworks.com/help/matlab/ref/uipushtool.html
+            %   https://www.mathworks.com/help/matlab/ref/uitoggletool.html
+            tb = uitoolbar;
+            pt = uipushtool;
+            tt = uitoggletool;
+
+            %% dialogs & notifications
+            % not sure if these should be included
+            %
+            %   https://www.mathworks.com/help/matlab/ref/uialert.html
+            %   https://www.mathworks.com/help/matlab/ref/uiconfirm.html
+            %   https://www.mathworks.com/help/matlab/ref/uiprogressdlg.html
+            %   https://www.mathworks.com/help/matlab/ref/uisetcolor.html
+            %   https://www.mathworks.com/help/matlab/ref/uigetfile.html
+            %   https://www.mathworks.com/help/matlab/ref/uiputfile.html
+            %   https://www.mathworks.com/help/matlab/ref/uigetdir.html
+            %   https://www.mathworks.com/help/matlab/ref/uiopen.html
+            %   https://www.mathworks.com/help/matlab/ref/uisave.html
+
+            %
+
+
+            
 
 
         end % addcomponents
