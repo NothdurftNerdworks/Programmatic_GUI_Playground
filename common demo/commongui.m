@@ -140,11 +140,59 @@ classdef commongui < matlab.mixin.SetGet
             % here we add the components and static styling
             % NOTE: we avoid 'position' arguments as these are set in layout independently
 
+            % common params
+            ComParams = struct();
+            ComParams.FontName = "Arial";
+            ComParams.FontSize = 12;
+            ComParams.FontColor = [0 0 0];
+
+            % "uipanel" p = uipanel;
+            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.container.panel.html
+            C = uipanel(obj.uifig);
+            C.Title = "CONTROLS";
+            C.BackgroundColor = [0.2 0.2 0.4];
+            obj.components.pnl_ctrl = C;
+
+            % "uilabel"
+            %   https://www.mathworks.com/help/matlab/ref/uilabel.html
+            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.label.html
+            C = uilabel(obj.uifig, ComParams);
+            C.Text = "My Label";
+            obj.components.lbl = C;
+
+            % "uibutton" btn = uibutton; (push)
+            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.button.html
+            C = uibutton(obj.components.pnl_ctrl, ComParams);
+            C.Text = "My Button";
+            C.Icon = rand([20 20 3]);
+            C.IconAlignment = "top";
+            obj.components.pbn = C;
+
+            % "uicheckbox" cbx = uicheckbox;
+            %   https://www.mathworks.com/help/matlab/ref/uicheckbox.html
+            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.checkbox.html
+            C = uicheckbox(obj.components.pnl_ctrl, ComParams);
+            C.Text = "My Checkbox";
+            obj.components.cbx = C;
+            
+            % "uieditfield" ef = uieditfield;
+            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.editfield.html
+            C = uieditfield(obj.components.pnl_ctrl, ComParams);
+            C.Placeholder = "(placeholder text)";
+            obj.components.ef = C;
+
+            % "uitextarea" txa = uitextarea;
+            % "uiaxes" ax = uiaxes;
+            % "uimenu" m = uimenu;
+
         end % addcomponents
 
         function layout(obj, ~, ~)
             % here we determine position of components relative to figure and one another
             % NOTE: separation of layout concerns makes dynamic resizing more straightforward
+            obj.components.lbl.Position(1:2) = [20 100];
+            obj.components.btn.Position(1:2) = [20 150];
+            obj.components.cbx.Position(1:2) = [20 160];
 
         end % layout
 
