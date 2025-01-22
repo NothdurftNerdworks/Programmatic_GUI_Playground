@@ -1,5 +1,5 @@
 # Programmatic_GUI_Playground
- Programmatic GUI for demonstration and testing against other MATLAB projects.
+ Programmatic GUIs for demonstration and testing against other MATLAB projects.
 
 ## Background
 MATLAB provides an interface, historically GUIDE and more recently AppDesigner, for building GUIs in a visual environment. These apps are a good starting grounds for many basic applications, but impose a framework often unsuited for more elaborate programs. As a result, developers often migrate to programmatic GUI development over time.
