@@ -144,10 +144,10 @@ classdef commongui < matlab.mixin.SetGet
             C.grid          = uigridlayout(obj.uifig);
             C.pnl_ctrl          = uipanel(C.grid);
             C.grid_ctrl             = uigridlayout(C.pnl_ctrl);
-            C.pbn_dothing               = uibutton(C.grid_ctrl);
+            C.lbl_newmsg                = uilabel(C.grid_ctrl);
+            C.edt_newmsg                = uieditfield(C.grid_ctrl);
+            C.pbn_sendmsg               = uibutton(C.grid_ctrl);
             C.cbx_resize                = uicheckbox(C.grid_ctrl);
-            C.lbl_msgs                  = uilabel(C.grid_ctrl);
-            C.edt                       = uieditfield(C.grid_ctrl);
             C.ax                = uiaxes(C.grid);
             C.pnl_msgs          = uipanel(C.grid);
             C.grid_msgs             = uigridlayout(C.pnl_msgs);               
@@ -156,28 +156,28 @@ classdef commongui < matlab.mixin.SetGet
             % now set grid shape
             C.grid.ColumnWidth  = {160, '1x'};
             C.grid.RowHeight    = {'1x', 160};
-            C.pnl_ctrl.Layout.Row = [1 2];
-            C.pnl_ctrl.Layout.Column = 1;
-            C.ax.Layout.Row = 1;
-            C.ax.Layout.Column = 2;
-            C.pnl_msgs.Layout.Row = 2;
-            C.pnl_msgs.Layout.Column = 2;
+            setlayout(C.pnl_ctrl,   1:2,    1);
+            setlayout(C.ax,         1,      2);
+            setlayout(C.pnl_msgs,   2,      2)
+
+            function setlayout(thing, rows, cols)
+                thing.Layout.Row = rows;
+                thing.Layout.Column = cols;
+
+            end
 
             C.grid_ctrl.ColumnWidth  = {'1x'};
             C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
-            C.pbn_dothing.Layout.Row = 1;
-            C.pbn_dothing.Layout.Column = 1;
-            C.cbx_resize.Layout.Row = 2;
-            C.cbx_resize.Layout.Column = 1;
-            C.lbl_msgs.Layout.Row = 3;
-            C.lbl_msgs.Layout.Column = 1;
-            C.edt.Layout.Row = 4;
-            C.edt.Layout.Column = 1;
+            setlayout(C.lbl_newmsg,     1,  1);
+            setlayout(C.edt_newmsg,     2,  1);
+            setlayout(C.pbn_sendmsg,    3,  1);
+            setlayout(C.cbx_resize,     4,  1);
+
 
             C.grid_msgs.ColumnWidth  = {'1x'};
             C.grid_msgs.RowHeight    = {'1x'};
-            C.txta_msgs.Layout.Row = 1;
-            C.txta_msgs.Layout.Column = 1;
+            setlayout(C.txta_msgs,      1,  1);
+
 
             C.grid_msgs.BackgroundColor = [0.3 0.3 0.3];
             C.grid_msgs.Padding = 0;
