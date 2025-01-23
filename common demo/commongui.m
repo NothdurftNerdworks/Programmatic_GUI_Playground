@@ -140,29 +140,63 @@ classdef commongui < matlab.mixin.SetGet
             % here we add the components and static styling
             % NOTE: we avoid 'position' arguments as these are set in layout independently
 
+            % build the tree
+            C.grid          = uigridlayout(obj.uifig);
+            C.pnl_ctrl          = uipanel(C.grid);
+            C.grid_ctrl             = uigridlayout(C.pnl_ctrl);
+            C.pbn_dothing               = uibutton(C.grid_ctrl);
+            C.cbx_resize                = uicheckbox(C.grid_ctrl);
+            C.edt                       = uieditfield(C.grid_ctrl);
+            C.ax                = uiaxes(C.grid);
+            C.grid_msgs         = uigridlayout(C.grid);               
+            C.lbl_msgs              = uilabel(C.grid_msgs);
+            C.txta_msgs             = uitextarea(C.grid_msgs);
+
+            % now set grid shape
+            C.grid.ColumnWidth  = {160, '1x'};
+            C.grid.RowHeight    = {'1x', 160};
+            C.pnl_ctrl.Layout.Row = [1 2];
+            C.pnl_ctrl.Layout.Column = 1;
+            C.ax.Layout.Row = 1;
+            C.ax.Layout.Column = 2;
+            C.grid_msgs.Layout.Row = 2;
+            C.grid_msgs.Layout.Column = 2;
+
+
+            C.grid_msgs.ColumnWidth  = {'1x'};
+            C.grid_msgs.RowHeight    = {'fit', '1x'};
+            C.lbl_msgs.Layout.Row = 1;
+            C.lbl_msgs.Layout.Column = 1;
+            C.txta_msgs.Layout.Row = 2;
+            C.txta_msgs.Layout.Column = 1;
+
+            C.grid_msgs.BackgroundColor = [0.3 0.3 0.3];
+            C.grid_msgs.Padding = 0;
+            C.grid_msgs.RowSpacing = 0;
+            C.grid_msgs.ColumnSpacing = 0;
+
+            %{
             % common params
             ComParams = struct();
             ComParams.FontName = "Arial";
-            ComParams.FontSize = 12;
+            ComParams.FontSize = 10;
             ComParams.FontColor = [0 0 0];
 
             % "uipanel" p = uipanel;
             %   https://www.mathworks.com/help/matlab/ref/matlab.ui.container.panel.html
-            C = uipanel(obj.uifig);
-            C.Title = "CONTROLS";
-            C.BackgroundColor = [0.2 0.2 0.4];
-            obj.components.pnl_ctrl = C;
+            
+            C.pnl_ctrl.Title = "CONTROLS";
+            C.pnl_ctrl.BackgroundColor = [0.2 0.2 0.4];
 
             % "uilabel"
             %   https://www.mathworks.com/help/matlab/ref/uilabel.html
             %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.label.html
-            C = uilabel(obj.uifig, ComParams);
+            
             C.Text = "My Label";
             obj.components.lbl = C;
 
             % "uibutton" btn = uibutton; (push)
             %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.button.html
-            C = uibutton(obj.components.pnl_ctrl, ComParams);
             C.Text = "My Button";
             C.Icon = rand([20 20 3]);
             C.IconAlignment = "top";
@@ -171,28 +205,32 @@ classdef commongui < matlab.mixin.SetGet
             % "uicheckbox" cbx = uicheckbox;
             %   https://www.mathworks.com/help/matlab/ref/uicheckbox.html
             %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.checkbox.html
-            C = uicheckbox(obj.components.pnl_ctrl, ComParams);
             C.Text = "My Checkbox";
             obj.components.cbx = C;
             
             % "uieditfield" ef = uieditfield;
             %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.editfield.html
-            C = uieditfield(obj.components.pnl_ctrl, ComParams);
             C.Placeholder = "(placeholder text)";
             obj.components.ef = C;
 
             % "uitextarea" txa = uitextarea;
+            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.textarea.html
+            C 
+            C.Placeholder = "(placeholder text)";
+            obj.components.txa = C;
+
             % "uiaxes" ax = uiaxes;
             % "uimenu" m = uimenu;
+            %}
+
+            obj.components = C;
 
         end % addcomponents
 
         function layout(obj, ~, ~)
             % here we determine position of components relative to figure and one another
             % NOTE: separation of layout concerns makes dynamic resizing more straightforward
-            obj.components.lbl.Position(1:2) = [20 100];
-            obj.components.btn.Position(1:2) = [20 150];
-            obj.components.cbx.Position(1:2) = [20 160];
+
 
         end % layout
 
