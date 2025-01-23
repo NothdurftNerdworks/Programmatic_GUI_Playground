@@ -11,7 +11,8 @@ classdef commongui < matlab.mixin.SetGet
     end
 
     properties (Dependent, AbortSet)
-        mouseCoordsVisible logical % toggle display of mouse coordinates (primarily for dev/debug)
+        mouseCoordsVisible logical  % toggle display of mouse coordinates (primarily for dev/debug)
+        pageLayout                  % 'landscape', 'portrait', or <missing>
 
     end
 
@@ -65,6 +66,25 @@ classdef commongui < matlab.mixin.SetGet
 
     %% ---------------------------------------------------------------------------------------------
     methods % get/set
+        function value = get.pageLayout(obj)
+            if isvalid(obj.uifig)
+                w = obj.uifig.Position(3);
+                h = obj.uifig.Position(4);
+                if w >= h
+                    value = "wide";
+
+                else
+                    value = "tall";
+
+                end
+
+            else
+                value = missing;
+
+            end
+
+        end % get.pageLayout
+
         function value = get.mouseCoordsVisible(obj)
                 value = isfield(obj.components, 'mousecoords');
 
@@ -153,31 +173,6 @@ classdef commongui < matlab.mixin.SetGet
             C.grid_msgs             = uigridlayout(C.pnl_msgs);               
             C.txta_msgs                 = uitextarea(C.grid_msgs);
 
-            % now set grid shape
-            C.grid.ColumnWidth  = {160, '1x'};
-            C.grid.RowHeight    = {'1x', 160};
-            setlayout(C.pnl_ctrl,   1:2,    1);
-            setlayout(C.ax,         1,      2);
-            setlayout(C.pnl_msgs,   2,      2)
-
-            function setlayout(thing, rows, cols)
-                thing.Layout.Row = rows;
-                thing.Layout.Column = cols;
-
-            end
-
-            C.grid_ctrl.ColumnWidth  = {'1x'};
-            C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
-            setlayout(C.lbl_newmsg,     1,  1);
-            setlayout(C.edt_newmsg,     2,  1);
-            setlayout(C.pbn_sendmsg,    3,  1);
-            setlayout(C.cbx_resize,     4,  1);
-
-
-            C.grid_msgs.ColumnWidth  = {'1x'};
-            C.grid_msgs.RowHeight    = {'1x'};
-            setlayout(C.txta_msgs,      1,  1);
-
 
             C.grid_msgs.BackgroundColor = [0.3 0.3 0.3];
             C.grid_msgs.Padding = 0;
@@ -243,6 +238,33 @@ classdef commongui < matlab.mixin.SetGet
             % here we determine position of components relative to figure and one another
             % NOTE: separation of layout concerns makes dynamic resizing more straightforward
 
+            C = obj.components;
+
+            % main grid
+            C.grid.ColumnWidth  = {160, '1x'};
+            C.grid.RowHeight    = {'1x', 160};
+            setlayout(C.pnl_ctrl,   1:2,    1);
+            setlayout(C.ax,         1,      2);
+            setlayout(C.pnl_msgs,   2,      2)
+
+            % subgrid 'ctrl'
+            C.grid_ctrl.ColumnWidth  = {'1x'};
+            C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
+            setlayout(C.lbl_newmsg,     1,  1);
+            setlayout(C.edt_newmsg,     2,  1);
+            setlayout(C.pbn_sendmsg,    3,  1);
+            setlayout(C.cbx_resize,     4,  1);
+
+            % subgrid 'msgs'
+            C.grid_msgs.ColumnWidth  = {'1x'};
+            C.grid_msgs.RowHeight    = {'1x'};
+            setlayout(C.txta_msgs,      1,  1);
+
+            function setlayout(thing, rows, cols)
+                thing.Layout.Row = rows;
+                thing.Layout.Column = cols;
+
+            end
 
         end % layout
 
