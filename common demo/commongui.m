@@ -12,13 +12,14 @@ classdef commongui < matlab.mixin.SetGet
 
     properties (Dependent, AbortSet)
         mouseCoordsVisible logical  % toggle display of mouse coordinates (primarily for dev/debug)
-        pageLayout                  % 'landscape', 'portrait', or <missing>
+        pageLayout string           % "wide", "tall", or <missing>
 
     end
 
     properties (SetAccess = private)
         uifig matlab.ui.Figure = matlab.ui.Figure.empty
-        components struct = struct() % struct to hold the various gui components
+        components struct = struct()        % struct to hold the various gui components
+        prevPageLayout string = missing     % track when necessary to redo layout
 
     end
 
@@ -71,7 +72,13 @@ classdef commongui < matlab.mixin.SetGet
                 w = obj.uifig.Position(3);
                 h = obj.uifig.Position(4);
                 if w >= h
-                    value = "wide";
+                    if w >= 2 * h
+                        value = 'extrawide';
+
+                    else
+                        value = "wide";
+
+                    end
 
                 else
                     value = "tall";
@@ -238,27 +245,80 @@ classdef commongui < matlab.mixin.SetGet
             % here we determine position of components relative to figure and one another
             % NOTE: separation of layout concerns makes dynamic resizing more straightforward
 
-            C = obj.components;
+            isRefreshNeeded = ismissing(obj.prevPageLayout) || ~strcmp(obj.pageLayout, obj.prevPageLayout);
+            if isRefreshNeeded
+                % prep
+                C = obj.components;
 
-            % main grid
-            C.grid.ColumnWidth  = {160, '1x'};
-            C.grid.RowHeight    = {'1x', 160};
-            setlayout(C.pnl_ctrl,   1:2,    1);
-            setlayout(C.ax,         1,      2);
-            setlayout(C.pnl_msgs,   2,      2)
+                switch obj.pageLayout
+                    case "extrawide"
+                        % main grid
+                        C.grid.RowHeight    = {'1x'};
+                        C.grid.ColumnWidth  = {120, '1x', '1x'};
+                        setlayout(C.pnl_ctrl,   1,      1);
+                        setlayout(C.ax,         1,      2);
+                        setlayout(C.pnl_msgs,   1,      3);
 
-            % subgrid 'ctrl'
-            C.grid_ctrl.ColumnWidth  = {'1x'};
-            C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
-            setlayout(C.lbl_newmsg,     1,  1);
-            setlayout(C.edt_newmsg,     2,  1);
-            setlayout(C.pbn_sendmsg,    3,  1);
-            setlayout(C.cbx_resize,     4,  1);
+                        % subgrid 'ctrl'
+                        C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
+                        C.grid_ctrl.ColumnWidth  = {'1x'};
+                        setlayout(C.lbl_newmsg,     1,  1);
+                        setlayout(C.edt_newmsg,     2,  1);
+                        setlayout(C.pbn_sendmsg,    3,  1);
+                        setlayout(C.cbx_resize,     4,  1);
 
-            % subgrid 'msgs'
-            C.grid_msgs.ColumnWidth  = {'1x'};
-            C.grid_msgs.RowHeight    = {'1x'};
-            setlayout(C.txta_msgs,      1,  1);
+                        % subgrid 'msgs'
+                        C.grid_msgs.RowHeight    = {'1x'};
+                        C.grid_msgs.ColumnWidth  = {'1x'};
+                        setlayout(C.txta_msgs,      1,  1);
+
+                    case "wide"
+                        % main grid
+                        C.grid.RowHeight    = {'1x', 120};
+                        C.grid.ColumnWidth  = {120, '1x'};
+                        setlayout(C.pnl_ctrl,   1:2,    1);
+                        setlayout(C.ax,         1,      2);
+                        setlayout(C.pnl_msgs,   2,      2);
+
+                        % subgrid 'ctrl'
+                        C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
+                        C.grid_ctrl.ColumnWidth  = {'1x'};
+                        setlayout(C.lbl_newmsg,     1,  1);
+                        setlayout(C.edt_newmsg,     2,  1);
+                        setlayout(C.pbn_sendmsg,    3,  1);
+                        setlayout(C.cbx_resize,     4,  1);
+
+                        % subgrid 'msgs'
+                        C.grid_msgs.RowHeight    = {'1x'};
+                        C.grid_msgs.ColumnWidth  = {'1x'};
+                        setlayout(C.txta_msgs,      1,  1);
+
+                    case "tall"
+                        % main grid
+                        C.grid.RowHeight    = {120, '1x', 120};
+                        C.grid.ColumnWidth  = {'1x'};
+                        setlayout(C.pnl_ctrl,   1,      1);
+                        setlayout(C.ax,         2,      1);
+                        setlayout(C.pnl_msgs,   3,      1);
+
+                        % subgrid 'ctrl'
+                        C.grid_ctrl.RowHeight    = {'1x'};
+                        C.grid_ctrl.ColumnWidth  = {'1x', '1x', '1x', '1x'};
+                        setlayout(C.lbl_newmsg,     1,  1);
+                        setlayout(C.edt_newmsg,     1,  2);
+                        setlayout(C.pbn_sendmsg,    1,  3);
+                        setlayout(C.cbx_resize,     1,  4);
+
+                        % subgrid 'msgs'
+                        C.grid_msgs.ColumnWidth  = {'1x'};
+                        C.grid_msgs.RowHeight    = {'1x'};
+                        setlayout(C.txta_msgs,      1,  1);
+
+                    otherwise
+
+                end % switch
+
+            end % if refresh needed
 
             function setlayout(thing, rows, cols)
                 thing.Layout.Row = rows;
