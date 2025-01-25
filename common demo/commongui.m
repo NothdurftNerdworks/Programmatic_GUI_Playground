@@ -12,7 +12,7 @@ classdef commongui < matlab.mixin.SetGet
 
     properties (Dependent, AbortSet)
         mouseCoordsVisible logical  % toggle display of mouse coordinates (primarily for dev/debug)
-        pageLayout string           % "wide", "tall", or <missing>
+        pageLayout string           % "doublewide", "wide", "tall", or <missing>
 
     end
 
@@ -73,7 +73,7 @@ classdef commongui < matlab.mixin.SetGet
                 h = obj.uifig.Position(4);
                 if w >= h
                     if w >= 2 * h
-                        value = 'extrawide';
+                        value = 'doublewide';
 
                     else
                         value = "wide";
@@ -251,7 +251,7 @@ classdef commongui < matlab.mixin.SetGet
                 C = obj.components;
 
                 switch obj.pageLayout
-                    case "extrawide"
+                    case "doublewide"
                         % main grid
                         C.grid.RowHeight    = {'1x'};
                         C.grid.ColumnWidth  = {120, '1x', '1x'};
