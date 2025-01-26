@@ -1,4 +1,4 @@
-classdef commongui < matlab.mixin.SetGet
+classdef commongui < dynamicprops
     %GUI Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -98,15 +98,17 @@ classdef commongui < matlab.mixin.SetGet
         end % get.pageLayout
 
         function value = get.mouseCoordsVisible(obj)
-                value = isfield(obj.components, 'mousecoords');
+                value = isprop(obj, "txta_mousecoords");
 
         end % get.mouseCoordsVisible
 
         function set.mouseCoordsVisible(obj, value)
+            persistent DP
             if value == true
                 disp('turn on mouse coords')
-                % make coords location visible
-                obj.components.mousecoords = uitextarea( ...
+                % make coords location
+                DP = addprop(obj, "txta_mousecoords");
+                obj.txta_mousecoords = uitextarea( ...
                     parent          = obj.uifig, ...
                     Position        = [5 5 110 20], ...
                     BackgroundColor = [0.81 1.00 0.02], ...
@@ -124,15 +126,16 @@ classdef commongui < matlab.mixin.SetGet
                 % turn off callback
                 obj.uifig.WindowButtonMotionFcn = '';
 
-                % make coords location hidden
-                delete(obj.components.mousecoords);
+                % remove coords location
+                delete(obj.txta_mousecoords);
+                delete(DP);
 
             end
 
             function dispmousecoords(~, ~, obj)
                 cursorPos = obj.uifig.CurrentPoint;
                 locString = sprintf('X: %3d Y: %3d', cursorPos(1), cursorPos(2));
-                obj.components.mousecoords.Value = locString;
+                obj.txta_mousecoords.Value = locString;
 
             end % dispmousecoords
 
@@ -255,9 +258,9 @@ classdef commongui < matlab.mixin.SetGet
                         % main grid
                         obj.grid_fig.RowHeight    = {'1x'};
                         obj.grid_fig.ColumnWidth  = {120, '1x', '1x'};
-                        setlayout(obj.pnl_ctrl,   1,      1);
-                        setlayout(obj.ax,         1,      2);
-                        setlayout(obj.pnl_msgs,   1,      3);
+                        setlayout(obj.pnl_ctrl,     1,      1);
+                        setlayout(obj.ax,           1,      2);
+                        setlayout(obj.pnl_msgs,     1,      3);
 
                         % subgrid 'ctrl'
                         obj.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
@@ -270,7 +273,7 @@ classdef commongui < matlab.mixin.SetGet
                         % subgrid 'msgs'
                         obj.grid_msgs.RowHeight    = {'1x'};
                         obj.grid_msgs.ColumnWidth  = {'1x'};
-                        setlayout(obj.txta_msgs,      1,  1);
+                        setlayout(obj.txta_msgs,    1,      1);
 
                     case "wide"
                         % main grid
