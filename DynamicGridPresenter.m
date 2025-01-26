@@ -1,13 +1,17 @@
-classdef commongui < dynamicprops
+classdef DynamicGridPresenter < dynamicprops
     %GUI Summary of this class goes here
     %   Detailed explanation goes here
     
     %% --- PROPERTIES ------------------------------------------------------------------------------
-    properties %(SetAccess = immutable)
-        appName     string  = "Common Gui Components Demo"
+    properties (Access = public)
+        verbose     logical = true  % if TRUE then interactions are announced to stdout
+
+    end
+    
+    properties (SetAccess = immutable)
+        appName     string  = "Dynamic Grid Presenter Demo"
         appVersion  string  = "1.0"
-        verbose     logical = true  % if TRUE then interactions are announced to stdout     
-        
+
     end
 
     properties (SetAccess = private)
@@ -45,7 +49,7 @@ classdef commongui < dynamicprops
     
     %% --- METHODS ---------------------------------------------------------------------------------
     methods % constructor/destructor
-        function obj = commongui
+        function obj = DynamicGridPresenter
             % build the gui
             obj.makefigure
             obj.addcomponents
@@ -105,7 +109,6 @@ classdef commongui < dynamicprops
         function set.mouseCoordsVisible(obj, value)
             persistent DP
             if value == true
-                disp('turn on mouse coords')
                 % make coords location
                 DP = addprop(obj, "txta_mousecoords");
                 obj.txta_mousecoords = uitextarea( ...

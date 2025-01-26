@@ -1,23 +1,26 @@
-classdef gui < matlab.mixin.SetGet
+classdef MouseCoordsPresenter < dynamicprops
     %GUI Summary of this class goes here
     %   Detailed explanation goes here
     
     %% --- PROPERTIES ------------------------------------------------------------------------------
-    properties %(SetAccess = immutable)
-        appName     string  = "MyApp"
-        appVersion  string  = "0.0"
-        verbose     logical = true  % if TRUE then interactions are announced to stdout     
+    properties (Access = public)
+        verbose     logical = true  % if TRUE then interactions are announced to stdout
 
     end
 
-    properties (Dependent, AbortSet)
-        mouseCoordsVisible logical % toggle display of mouse coordinates (primarily for dev/debug)
+    properties (SetAccess = immutable)
+        appName     string  = "Mouse Coords View Demo"
+        appVersion  string  = "1.0"
 
     end
 
     properties (SetAccess = private)
         uifig matlab.ui.Figure = matlab.ui.Figure.empty
-        components struct = struct() % struct to hold the various gui components
+
+    end
+
+    properties (Dependent, AbortSet)
+        mouseCoordsVisible logical % toggle display of mouse coordinates (primarily for dev/debug)
 
     end
 
@@ -29,7 +32,7 @@ classdef gui < matlab.mixin.SetGet
     
     %% --- METHODS ---------------------------------------------------------------------------------
     methods % constructor/destructor
-        function obj = gui
+        function obj = MouseCoordsPresenter
             % build the gui
             obj.makefigure
             obj.addcomponents
