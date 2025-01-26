@@ -7,6 +7,11 @@ classdef commongui < matlab.mixin.SetGet
         appName     string  = "Common Gui Components Demo"
         appVersion  string  = "1.0"
         verbose     logical = true  % if TRUE then interactions are announced to stdout     
+        
+    end
+
+    properties (SetAccess = private)
+        prevPageLayout string = missing     % track when necessary to redo layout
 
     end
 
@@ -17,9 +22,18 @@ classdef commongui < matlab.mixin.SetGet
     end
 
     properties (SetAccess = private)
-        uifig matlab.ui.Figure = matlab.ui.Figure.empty
-        components struct = struct()        % struct to hold the various gui components
-        prevPageLayout string = missing     % track when necessary to redo layout
+        uifig           matlab.ui.Figure
+        grid_fig            matlab.ui.container.GridLayout
+        pnl_ctrl                matlab.ui.container.Panel
+        grid_ctrl                   matlab.ui.container.GridLayout
+        lbl_newmsg                      matlab.ui.control.Label
+        edt_newmsg                      matlab.ui.control.EditField
+        pbn_sendmsg                     matlab.ui.control.Button
+        cbx_resize                      matlab.ui.control.CheckBox
+        ax                      matlab.ui.control.UIAxes
+        pnl_msgs                matlab.ui.container.Panel
+        grid_msgs                   matlab.ui.container.GridLayout
+        txta_msgs                       matlab.ui.control.TextArea
 
     end
 
@@ -71,18 +85,9 @@ classdef commongui < matlab.mixin.SetGet
             if isvalid(obj.uifig)
                 w = obj.uifig.Position(3);
                 h = obj.uifig.Position(4);
-                if w >= h
-                    if w >= 2 * h
-                        value = 'doublewide';
-
-                    else
-                        value = "wide";
-
-                    end
-
-                else
-                    value = "tall";
-
+                if      w >= 2 * h;     value = 'doublewide';
+                elseif  w >= h;         value = 'wide';
+                else;                   value = "tall";
                 end
 
             else
@@ -168,26 +173,26 @@ classdef commongui < matlab.mixin.SetGet
             % NOTE: we avoid 'position' arguments as these are set in layout independently
 
             % build the tree
-            C.grid          = uigridlayout(obj.uifig);
-            C.pnl_ctrl          = uipanel(C.grid);
-            C.grid_ctrl             = uigridlayout(C.pnl_ctrl);
-            C.lbl_newmsg                = uilabel(C.grid_ctrl);
-            C.edt_newmsg                = uieditfield(C.grid_ctrl);
-            C.pbn_sendmsg               = uibutton(C.grid_ctrl);
-            C.cbx_resize                = uicheckbox(C.grid_ctrl);
-            C.ax                = uiaxes(C.grid);
-            C.pnl_msgs          = uipanel(C.grid);
-            C.grid_msgs             = uigridlayout(C.pnl_msgs);               
-            C.txta_msgs                 = uitextarea(C.grid_msgs);
+            obj.grid_fig        = uigridlayout(obj.uifig);
+            obj.pnl_ctrl            = uipanel(obj.grid_fig);
+            obj.grid_ctrl               = uigridlayout(obj.pnl_ctrl);
+            obj.lbl_newmsg                  = uilabel(obj.grid_ctrl);
+            obj.edt_newmsg                  = uieditfield(obj.grid_ctrl);
+            obj.pbn_sendmsg                 = uibutton(obj.grid_ctrl);
+            obj.cbx_resize                  = uicheckbox(obj.grid_ctrl);
+            obj.ax                  = uiaxes(obj.grid_fig);
+            obj.pnl_msgs            = uipanel(obj.grid_fig);
+            obj.grid_msgs               = uigridlayout(obj.pnl_msgs);               
+            obj.txta_msgs                   = uitextarea(obj.grid_msgs);
 
 
-            C.grid_msgs.BackgroundColor = [0.3 0.3 0.3];
-            C.grid_msgs.Padding = 0;
-            C.grid_msgs.RowSpacing = 0;
-            C.grid_msgs.ColumnSpacing = 0;
+            obj.grid_msgs.BackgroundColor = [0.3 0.3 0.3];
+            obj.grid_msgs.Padding = 0;
+            obj.grid_msgs.RowSpacing = 0;
+            obj.grid_msgs.ColumnSpacing = 0;
 
-            C.pnl_ctrl.Title = "Control Panel";
-            C.pnl_msgs.Title = "Message Panel";
+            obj.pnl_ctrl.Title = "Control Panel";
+            obj.pnl_msgs.Title = "Message Panel";
 
             %{
             % common params
@@ -237,8 +242,6 @@ classdef commongui < matlab.mixin.SetGet
             % "uimenu" m = uimenu;
             %}
 
-            obj.components = C;
-
         end % addcomponents
 
         function layout(obj, ~, ~)
@@ -247,72 +250,69 @@ classdef commongui < matlab.mixin.SetGet
 
             isRefreshNeeded = ismissing(obj.prevPageLayout) || ~strcmp(obj.pageLayout, obj.prevPageLayout);
             if isRefreshNeeded
-                % prep
-                C = obj.components;
-
                 switch obj.pageLayout
                     case "doublewide"
                         % main grid
-                        C.grid.RowHeight    = {'1x'};
-                        C.grid.ColumnWidth  = {120, '1x', '1x'};
-                        setlayout(C.pnl_ctrl,   1,      1);
-                        setlayout(C.ax,         1,      2);
-                        setlayout(C.pnl_msgs,   1,      3);
+                        obj.grid_fig.RowHeight    = {'1x'};
+                        obj.grid_fig.ColumnWidth  = {120, '1x', '1x'};
+                        setlayout(obj.pnl_ctrl,   1,      1);
+                        setlayout(obj.ax,         1,      2);
+                        setlayout(obj.pnl_msgs,   1,      3);
 
                         % subgrid 'ctrl'
-                        C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
-                        C.grid_ctrl.ColumnWidth  = {'1x'};
-                        setlayout(C.lbl_newmsg,     1,  1);
-                        setlayout(C.edt_newmsg,     2,  1);
-                        setlayout(C.pbn_sendmsg,    3,  1);
-                        setlayout(C.cbx_resize,     4,  1);
+                        obj.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
+                        obj.grid_ctrl.ColumnWidth  = {'1x'};
+                        setlayout(obj.lbl_newmsg,   1,      1);
+                        setlayout(obj.edt_newmsg,   2,      1);
+                        setlayout(obj.pbn_sendmsg,  3,      1);
+                        setlayout(obj.cbx_resize,   4,      1);
 
                         % subgrid 'msgs'
-                        C.grid_msgs.RowHeight    = {'1x'};
-                        C.grid_msgs.ColumnWidth  = {'1x'};
-                        setlayout(C.txta_msgs,      1,  1);
+                        obj.grid_msgs.RowHeight    = {'1x'};
+                        obj.grid_msgs.ColumnWidth  = {'1x'};
+                        setlayout(obj.txta_msgs,      1,  1);
 
                     case "wide"
                         % main grid
-                        C.grid.RowHeight    = {'1x', 120};
-                        C.grid.ColumnWidth  = {120, '1x'};
-                        setlayout(C.pnl_ctrl,   1:2,    1);
-                        setlayout(C.ax,         1,      2);
-                        setlayout(C.pnl_msgs,   2,      2);
+                        obj.grid_fig.RowHeight    = {'1x', 120};
+                        obj.grid_fig.ColumnWidth  = {120, '1x'};
+                        setlayout(obj.pnl_ctrl,     1:2,    1);
+                        setlayout(obj.ax,           1,      2);
+                        setlayout(obj.pnl_msgs,     2,      2);
 
                         % subgrid 'ctrl'
-                        C.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
-                        C.grid_ctrl.ColumnWidth  = {'1x'};
-                        setlayout(C.lbl_newmsg,     1,  1);
-                        setlayout(C.edt_newmsg,     2,  1);
-                        setlayout(C.pbn_sendmsg,    3,  1);
-                        setlayout(C.cbx_resize,     4,  1);
+                        obj.grid_ctrl.RowHeight    = {'fit', 'fit', 'fit' 'fit', '1x'};
+                        obj.grid_ctrl.ColumnWidth  = {'1x'};
+                        setlayout(obj.lbl_newmsg,   1,      1);
+                        setlayout(obj.edt_newmsg,   2,      1);
+                        setlayout(obj.pbn_sendmsg,  3,      1);
+                        setlayout(obj.cbx_resize,   4,      1);
 
                         % subgrid 'msgs'
-                        C.grid_msgs.RowHeight    = {'1x'};
-                        C.grid_msgs.ColumnWidth  = {'1x'};
-                        setlayout(C.txta_msgs,      1,  1);
+                        obj.grid_msgs.RowHeight    = {'1x'};
+                        obj.grid_msgs.ColumnWidth  = {'1x'};
+                        setlayout(obj.txta_msgs,    1,      1);
 
                     case "tall"
                         % main grid
-                        C.grid.RowHeight    = {120, '1x', 120};
-                        C.grid.ColumnWidth  = {'1x'};
-                        setlayout(C.pnl_ctrl,   1,      1);
-                        setlayout(C.ax,         2,      1);
-                        setlayout(C.pnl_msgs,   3,      1);
+                        obj.grid_fig.RowHeight    = {120, '1x', 120};
+                        obj.grid_fig.ColumnWidth  = {'1x'};
+                        setlayout(obj.pnl_ctrl,     1,      1);
+                        setlayout(obj.ax,           2,      1);
+                        setlayout(obj.pnl_msgs,     3,      1);
 
                         % subgrid 'ctrl'
-                        C.grid_ctrl.RowHeight    = {'1x'};
-                        C.grid_ctrl.ColumnWidth  = {'1x', '1x', '1x', '1x'};
-                        setlayout(C.lbl_newmsg,     1,  1);
-                        setlayout(C.edt_newmsg,     1,  2);
-                        setlayout(C.pbn_sendmsg,    1,  3);
-                        setlayout(C.cbx_resize,     1,  4);
+                        obj.grid_ctrl.RowHeight    = {'1x'};
+                        obj.grid_ctrl.ColumnWidth  = {'1x', '1x', '1x', '1x'};
+                        setlayout(obj.lbl_newmsg,   1,      1);
+                        setlayout(obj.edt_newmsg,   1,      2);
+                        setlayout(obj.pbn_sendmsg,  1,      3);
+                        setlayout(obj.cbx_resize,   1,      4);
 
                         % subgrid 'msgs'
-                        C.grid_msgs.ColumnWidth  = {'1x'};
-                        C.grid_msgs.RowHeight    = {'1x'};
-                        setlayout(C.txta_msgs,      1,  1);
+                        obj.grid_msgs.ColumnWidth  = {'1x'};
+                        obj.grid_msgs.RowHeight    = {'1x'};
+                        setlayout(obj.txta_msgs,    1,      1);
 
                     otherwise
 
@@ -324,7 +324,7 @@ classdef commongui < matlab.mixin.SetGet
                 thing.Layout.Row = rows;
                 thing.Layout.Column = cols;
 
-            end
+            end % setlayout
 
         end % layout
 
