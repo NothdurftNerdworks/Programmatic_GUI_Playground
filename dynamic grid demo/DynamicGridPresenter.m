@@ -3,25 +3,20 @@ classdef DynamicGridPresenter < dynamicprops
     %   Detailed explanation goes here
     
     %% --- PROPERTIES ------------------------------------------------------------------------------
-    properties (Access = public)
-        verbose     logical = true  % if TRUE then interactions are announced to stdout
-
-    end
-    
-    properties (SetAccess = immutable)
+    properties (Constant)
         appName     string  = "Dynamic Grid Presenter Demo"
         appVersion  string  = "1.0"
 
     end
 
-    properties (SetAccess = private)
-        prevPageLayout string = missing     % track when necessary to redo layout
+    properties (Access = public)
+        verbose     logical = true  % if TRUE then interactions are announced to stdout
 
     end
 
     properties (Dependent, AbortSet)
         mouseCoordsVisible logical  % toggle display of mouse coordinates (primarily for dev/debug)
-        pageLayout string           % "doublewide", "wide", "tall", or <missing>
+        viewOrientation string      % "doublewide", "wide", "tall", or <missing>
 
     end
 
@@ -63,10 +58,9 @@ classdef DynamicGridPresenter < dynamicprops
 
         end
 
-        function delete(obj)
+        function delete(~)
 
-
-        end
+        end % delete
 
         function closegui(obj, varargin)
             % close uifigure if it exists
@@ -79,13 +73,13 @@ classdef DynamicGridPresenter < dynamicprops
             % now delete the object
             obj.delete
 
-        end
+        end % closegui
 
     end % constructor/destructor
 
     %% ---------------------------------------------------------------------------------------------
     methods % get/set
-        function value = get.pageLayout(obj)
+        function value = get.viewOrientation(obj)
             if isvalid(obj.uifig)
                 w = obj.uifig.Position(3);
                 h = obj.uifig.Position(4);
@@ -99,7 +93,7 @@ classdef DynamicGridPresenter < dynamicprops
 
             end
 
-        end % get.pageLayout
+        end % get.viewOrientation
 
         function value = get.mouseCoordsVisible(obj)
                 value = isprop(obj, "txta_mousecoords");
@@ -253,10 +247,12 @@ classdef DynamicGridPresenter < dynamicprops
         function layout(obj, ~, ~)
             % here we determine position of components relative to figure and one another
             % NOTE: separation of layout concerns makes dynamic resizing more straightforward
-
-            isRefreshNeeded = ismissing(obj.prevPageLayout) || ~strcmp(obj.pageLayout, obj.prevPageLayout);
+            persistent prevOrientation
+            currentOrientation = obj.viewOrientation;
+            
+            isRefreshNeeded = isempty(prevOrientation) || ~strcmp(currentOrientation, prevOrientation);
             if isRefreshNeeded
-                switch obj.pageLayout
+                switch currentOrientation
                     case "doublewide"
                         % main grid
                         obj.grid_fig.RowHeight    = {'1x'};
@@ -324,8 +320,12 @@ classdef DynamicGridPresenter < dynamicprops
 
                 end % switch
 
+                % keep track
+                prevOrientation = currentOrientation;
+
             end % if refresh needed
 
+            % --- internal helper function(s) ---
             function setlayout(thing, rows, cols)
                 thing.Layout.Row = rows;
                 thing.Layout.Column = cols;

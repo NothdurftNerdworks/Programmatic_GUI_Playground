@@ -3,24 +3,24 @@ classdef MouseCoordsPresenter < dynamicprops
     %   Detailed explanation goes here
     
     %% --- PROPERTIES ------------------------------------------------------------------------------
-    properties (Access = public)
-        verbose     logical = true  % if TRUE then interactions are announced to stdout
-
-    end
-
-    properties (SetAccess = immutable)
+    properties (Constant)
         appName     string  = "Mouse Coords View Demo"
         appVersion  string  = "1.0"
 
     end
 
-    properties (SetAccess = private)
-        uifig matlab.ui.Figure = matlab.ui.Figure.empty
+    properties (Access = public)
+        verbose     logical = true  % if TRUE then interactions are announced to stdout
 
     end
 
     properties (Dependent, AbortSet)
         mouseCoordsVisible logical % toggle display of mouse coordinates (primarily for dev/debug)
+
+    end
+
+    properties (SetAccess = private)
+        uifig matlab.ui.Figure = matlab.ui.Figure.empty
 
     end
 
@@ -46,10 +46,9 @@ classdef MouseCoordsPresenter < dynamicprops
 
         end
 
-        function delete(obj)
+        function delete(~)
 
-
-        end
+        end % delete
 
         function closegui(obj, varargin)
             % close uifigure if it exists
@@ -62,22 +61,23 @@ classdef MouseCoordsPresenter < dynamicprops
             % now delete the object
             obj.delete
 
-        end
+        end % closegui
 
     end % constructor/destructor
 
     %% ---------------------------------------------------------------------------------------------
     methods % get/set
         function value = get.mouseCoordsVisible(obj)
-                value = isfield(obj.components, 'mousecoords');
+                value = isprop(obj, "txta_mousecoords");
 
         end % get.mouseCoordsVisible
 
         function set.mouseCoordsVisible(obj, value)
+            persistent DP
             if value == true
-                disp('turn on mouse coords')
-                % make coords location visible
-                obj.components.mousecoords = uitextarea( ...
+                % make coords location
+                DP = addprop(obj, "txta_mousecoords");
+                obj.txta_mousecoords = uitextarea( ...
                     parent          = obj.uifig, ...
                     Position        = [5 5 110 20], ...
                     BackgroundColor = [0.81 1.00 0.02], ...
@@ -95,15 +95,16 @@ classdef MouseCoordsPresenter < dynamicprops
                 % turn off callback
                 obj.uifig.WindowButtonMotionFcn = '';
 
-                % make coords location hidden
-                delete(obj.components.mousecoords);
+                % remove coords location
+                delete(obj.txta_mousecoords);
+                delete(DP);
 
             end
 
             function dispmousecoords(~, ~, obj)
                 cursorPos = obj.uifig.CurrentPoint;
                 locString = sprintf('X: %3d Y: %3d', cursorPos(1), cursorPos(2));
-                obj.components.mousecoords.Value = locString;
+                obj.txta_mousecoords.Value = locString;
 
             end % dispmousecoords
 
