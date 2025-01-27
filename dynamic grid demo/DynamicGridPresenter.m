@@ -185,71 +185,28 @@ classdef DynamicGridPresenter < dynamicprops
             obj.grid_msgs               = uigridlayout(obj.pnl_msgs);               
             obj.txta_msgs                   = uitextarea(obj.grid_msgs);
 
+            % set component details
+            obj.pnl_ctrl.Title = "Control Panel";
+
+            obj.edt_newmsg.Placeholder = "(placeholder text)";
+
+            obj.pnl_msgs.Title = "Message Panel";
 
             obj.grid_msgs.BackgroundColor = [0.3 0.3 0.3];
             obj.grid_msgs.Padding = 0;
             obj.grid_msgs.RowSpacing = 0;
             obj.grid_msgs.ColumnSpacing = 0;
 
-            obj.pnl_ctrl.Title = "Control Panel";
-            obj.pnl_msgs.Title = "Message Panel";
-
-            %{
-            % common params
-            ComParams = struct();
-            ComParams.FontName = "Arial";
-            ComParams.FontSize = 10;
-            ComParams.FontColor = [0 0 0];
-
-            % "uipanel" p = uipanel;
-            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.container.panel.html
-            
-            C.pnl_ctrl.Title = "CONTROLS";
-            C.pnl_ctrl.BackgroundColor = [0.2 0.2 0.4];
-
-            % "uilabel"
-            %   https://www.mathworks.com/help/matlab/ref/uilabel.html
-            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.label.html
-            
-            C.Text = "My Label";
-            obj.components.lbl = C;
-
-            % "uibutton" btn = uibutton; (push)
-            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.button.html
-            C.Text = "My Button";
-            C.Icon = rand([20 20 3]);
-            C.IconAlignment = "top";
-            obj.components.pbn = C;
-
-            % "uicheckbox" cbx = uicheckbox;
-            %   https://www.mathworks.com/help/matlab/ref/uicheckbox.html
-            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.checkbox.html
-            C.Text = "My Checkbox";
-            obj.components.cbx = C;
-            
-            % "uieditfield" ef = uieditfield;
-            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.editfield.html
-            C.Placeholder = "(placeholder text)";
-            obj.components.ef = C;
-
-            % "uitextarea" txa = uitextarea;
-            %   https://www.mathworks.com/help/matlab/ref/matlab.ui.control.textarea.html
-            C 
-            C.Placeholder = "(placeholder text)";
-            obj.components.txa = C;
-
-            % "uiaxes" ax = uiaxes;
-            % "uimenu" m = uimenu;
-            %}
+            obj.txta_msgs.Placeholder = "(placeholder text)";
 
         end % addcomponents
 
         function layout(obj, ~, ~)
             % here we determine position of components relative to figure and one another
             % NOTE: separation of layout concerns makes dynamic resizing more straightforward
-            persistent prevOrientation
+            persistent prevOrientation % track previous state, scope limited to this method
             currentOrientation = obj.viewOrientation;
-            
+
             isRefreshNeeded = isempty(prevOrientation) || ~strcmp(currentOrientation, prevOrientation);
             if isRefreshNeeded
                 switch currentOrientation
