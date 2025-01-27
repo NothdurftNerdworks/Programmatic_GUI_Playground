@@ -3,23 +3,27 @@ classdef DynamicGridPresenter < dynamicprops
     %   Detailed explanation goes here
     
     %% --- PROPERTIES ------------------------------------------------------------------------------
+    % references
     properties (Constant)
         appName     string  = "Dynamic Grid Presenter Demo"
         appVersion  string  = "1.0"
 
     end
 
+    % behavior flags
     properties (Access = public)
         verbose     logical = true  % if TRUE then interactions are announced to stdout
 
     end
 
+    % dependent properties
     properties (Dependent, AbortSet)
         mouseCoordsVisible logical  % toggle display of mouse coordinates (primarily for dev/debug)
         viewOrientation string      % "doublewide", "wide", "tall", or <missing>
 
     end
 
+    % view elements
     properties (SetAccess = private)
         uifig           matlab.ui.Figure
         grid_fig            matlab.ui.container.GridLayout
