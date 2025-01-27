@@ -1,4 +1,4 @@
-classdef MouseCoordsPresenter < dynamicprops
+classdef MouseCoordsView < dynamicprops
     %GUI Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -32,7 +32,7 @@ classdef MouseCoordsPresenter < dynamicprops
     
     %% --- METHODS ---------------------------------------------------------------------------------
     methods % constructor/destructor
-        function obj = MouseCoordsPresenter
+        function obj = MouseCoordsView
             % build the gui
             obj.makefigure
             obj.addcomponents
