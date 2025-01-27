@@ -1,11 +1,11 @@
-classdef DynamicGridPresenter < dynamicprops
+classdef DynamicGridView < dynamicprops
     %GUI Summary of this class goes here
     %   Detailed explanation goes here
     
     %% --- PROPERTIES ------------------------------------------------------------------------------
     % references
     properties (Constant)
-        appName     string  = "Dynamic Grid Presenter Demo"
+        appName     string  = "Dynamic Grid View Demo"
         appVersion  string  = "1.0"
 
     end
@@ -48,7 +48,7 @@ classdef DynamicGridPresenter < dynamicprops
     
     %% --- METHODS ---------------------------------------------------------------------------------
     methods % constructor/destructor
-        function obj = DynamicGridPresenter
+        function obj = DynamicGridView
             % build the gui
             obj.makefigure
             obj.addcomponents
